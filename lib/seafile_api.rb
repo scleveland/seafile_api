@@ -16,15 +16,6 @@ class Seafile
 	 self.token = self.get_token(self.host, self.username, self.password)
     end
 
-    def seafile_get(host, path)
-    	response = Curl::Easy.http_get(host+path) do |c|
-	    c.ssl_verify_peer = false 
-	    c.headers["Authorization"] = "Token #{token}"
-	    c.headers["Accept"] = 'application/json; indent=4'
-	  end
-	  JSON.parse(response.body) 
-	end
-
 	def get_token(host, username, password)
 	  response = Curl::Easy.http_post(host+'/api2/auth-token/',Curl::PostField.content('username', username),Curl::PostField.content('password', password))do |c|
 	    c.ssl_verify_peer = false 
@@ -50,4 +41,18 @@ class Seafile
  		result["repo_id"]
  	end
 
+ 	def list_libraries(host,token)
+ 		seafile_get(host,"/api2/repos/")
+ 	end
+
+  private
+
+    def seafile_get(host, path)
+      response = Curl::Easy.http_get(host+path) do |c|
+	    c.ssl_verify_peer = false 
+	    c.headers["Authorization"] = "Token #{token}"
+	    c.headers["Accept"] = 'application/json; indent=4'
+	  end
+	  JSON.parse(response.body) 
+	end
 end
