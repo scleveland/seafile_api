@@ -17,7 +17,7 @@ class Seafile
     end
 
 	def self.get_token(host, username, password)
-	  response = Curl::Easy.http_post(base_url+'/api2/auth-token/',Curl::PostField.content('username', username),Curl::PostField.content('password', password))do |c|
+	  response = Curl::Easy.http_post(host+'/api2/auth-token/',Curl::PostField.content('username', username),Curl::PostField.content('password', password))do |c|
 	    c.ssl_verify_peer = false 
 	  end
 	  #if JSON.parse(response.body)
