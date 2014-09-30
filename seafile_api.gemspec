@@ -1,7 +1,7 @@
 #seafile_api.gemspec
 Gem::Specification.new do |s|
   s.name        = 'seafile_api'
-  s.version     = '0.0.1'
+  s.version     = '0.0.1.1'
   s.date        = '2014-02-21'
   s.summary     = "Ruby wrapper to Seafile API"
   s.description = "Ruby wrapper to Seafile API"
