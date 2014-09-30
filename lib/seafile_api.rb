@@ -22,7 +22,7 @@ class Seafile
 	    c.headers["Authorization"] = "Token #{token}"
 	    c.headers["Accept"] = 'application/json; indent=4'
 	  end
-	  response.body
+	  JSON.parse(response.body) 
 	end
 
 	def get_token(host, username, password)
@@ -43,6 +43,11 @@ class Seafile
 
  	def starred_files(host,token)
  		seafile_get(host,"/api2/starredfiles/")
+ 	end
+
+ 	def default_repo(host,token)
+ 		result = seafile_get(host,"/api2/default-repo/")
+ 		result["repo_id"]
  	end
 
 end
