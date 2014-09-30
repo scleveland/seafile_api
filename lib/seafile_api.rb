@@ -16,16 +16,33 @@ class Seafile
 	 self.token = self.get_token(self.host, self.username, self.password)
     end
 
+    def seafile_get(host, path)
+    	response = Curl::Easy.http_get(host+path) do |c|
+	    c.ssl_verify_peer = false 
+	    c.headers["Authorization"] = "Token #{token}"
+	    c.headers["Accept"] = 'application/json; indent=4'
+	  end
+	  response.body
+	end
+
 	def get_token(host, username, password)
 	  response = Curl::Easy.http_post(host+'/api2/auth-token/',Curl::PostField.content('username', username),Curl::PostField.content('password', password))do |c|
 	    c.ssl_verify_peer = false 
 	  end
-	  #if JSON.parse(response.body)
 	  JSON.parse(response.body)['token']
-	  #else
-	 ## 	response.body
-	  #end
 	end
 
-	
+	def account_info(host,token)
+	  response = Curl::Easy.http_get(host+'/api2/account/info/') do |c|
+	    c.ssl_verify_peer = false 
+	    c.headers["Authorization"] = "Token #{token}"
+	    c.headers["Accept"] = 'application/json; indent=4'
+	  end
+	  response.body
+ 	end
+
+ 	def starred_files(host,token)
+ 		seafile_get(host,"/api2/starredfiles/")
+ 	end
+
 end
