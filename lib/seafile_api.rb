@@ -13,7 +13,7 @@ class Seafile
      self.username = username
 	 self.password = password
 	 self.host = host
-	 self.token = self.get_token(sefl.host, selfusername, self.password)
+	 self.token = self.get_token(self.host, self.username, self.password)
     end
 
 	def self.get_token(host, username, password)
