@@ -9,10 +9,10 @@ class Seafile
 	  response = Curl::Easy.http_post(base_url+'/api2/auth-token/',Curl::PostField.content('username', username),Curl::PostField.content('password', password))do |c|
 	    c.ssl_verify_peer = false 
 	  end
-	  if JSON.parse(response.body_str)
-	    JSON.parse(response.body_str)['token']
+	  if JSON.parse(response.body)
+	    JSON.parse(response.body)['token']
 	  else
-	  	response.body_str
+	  	response.body
 	  end
 	end
 
