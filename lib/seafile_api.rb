@@ -9,57 +9,61 @@ class Seafile
 	attr_accessor :host
 	attr_accessor :token
 
-    def initialize(host,username,password)
+    def initialize(host,username,password,token=nil)
      self.username = username
 	 self.password = password
 	 self.host = host
-	 self.token = self.get_token(self.host, self.username, self.password)
+	 if token.nil?
+	   self.token = self.get_token()
+	 else
+	   self.token = token 
+	 end
     end
 
-	def get_token(host, username, password)
-	  response = Curl::Easy.http_post(host+'/api2/auth-token/',Curl::PostField.content('username', username),Curl::PostField.content('password', password))do |c|
+	def get_token()
+	  response = Curl::Easy.http_post(self.host+'/api2/auth-token/',Curl::PostField.content('username', self.username),Curl::PostField.content('password', self.password))do |c|
 	    c.ssl_verify_peer = false 
 	  end
 	  JSON.parse(response.body)['token']
 	end
 
 	def account_info(host,token)
-	  response = Curl::Easy.http_get(host+'/api2/account/info/') do |c|
+	  response = Curl::Easy.http_get(self.host+'/api2/account/info/') do |c|
 	    c.ssl_verify_peer = false 
-	    c.headers["Authorization"] = "Token #{token}"
+	    c.headers["Authorization"] = "Token #{self.token}"
 	    c.headers["Accept"] = 'application/json; indent=4'
 	  end
 	  response.body
  	end
 
- 	def starred_files(host,token)
- 		seafile_get(host,"/api2/starredfiles/")
+ 	def starred_files()
+ 		seafile_get("/api2/starredfiles/")
  	end
 
- 	def default_repo(host,token)
- 		result = seafile_get(host,"/api2/default-repo/")
+ 	def default_repo()
+ 		result = seafile_get("/api2/default-repo/")
  		result["repo_id"]
  	end
 
- 	def list_libraries(host,token)
- 		seafile_get(host,"/api2/repos/")
+ 	def list_libraries()
+ 		seafile_get("/api2/repos/")
  	end
 
- 	def list_library_directory_entries(host, token, repo_id)
- 		seafile_get(host,"/api2/repos/#{repo_id}/dir/")
+ 	def list_library_directory_entries(repo_id)
+ 		seafile_get("/api2/repos/#{repo_id}/dir/")
  	end
 
- 	def list_directory_entries(host, token, repo_id, dir)
- 		seafile_get(host,"/api2/repos/#{repo_id}/dir/?p=#{dir}")
+ 	def list_directory_entries(repo_id, dir)
+ 		seafile_get("/api2/repos/#{repo_id}/dir/?p=#{dir}")
  	end
 
- 	
+
   private
 
-    def seafile_get(host, path)
-      response = Curl::Easy.http_get(host+path) do |c|
+    def seafile_get(path)
+      response = Curl::Easy.http_get(self.host+path) do |c|
 	    c.ssl_verify_peer = false 
-	    c.headers["Authorization"] = "Token #{token}"
+	    c.headers["Authorization"] = "Token #{self.token}"
 	    c.headers["Accept"] = 'application/json; indent=4'
 	  end
 	  JSON.parse(response.body) 
