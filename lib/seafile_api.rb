@@ -45,6 +45,15 @@ class Seafile
  		seafile_get(host,"/api2/repos/")
  	end
 
+ 	def list_library_directory_entries(host, token, repo_id)
+ 		seafile_get(host,"/api2/repos/#{repo_id}/dir/")
+ 	end
+
+ 	def list_directory_entries(host, token, repo_id, dir)
+ 		seafile_get(host,"/api2/repos/#{repo_id}/dir/?p=#{dir}")
+ 	end
+
+ 	
   private
 
     def seafile_get(host, path)
