@@ -66,6 +66,7 @@ class Seafile
 	    c.headers["Authorization"] = "Token #{self.token}"
 	    c.headers["Accept"] = 'application/json; indent=4'
 	  end
-	  JSON.parse(response.body) 
+	  response.body
+	  #JSON.parse(response.body) 
 	end
 end
